@@ -1,8 +1,8 @@
 const multer = require('multer');
 const File = require('../models/fileModel');
+
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage }).single('file');
-
 
 exports.uploadFile = (req, res) => {
   upload(req, res, (err) => {
@@ -15,10 +15,11 @@ exports.uploadFile = (req, res) => {
       originalname: req.file.originalname,
       mimetype: req.file.mimetype,
       data: req.file.buffer,
-      size: req.file.size
+      size: req.file.size,
     });
 
-    newFile.save()
+    newFile
+      .save()
       .then(() => res.status(201).json(newFile))
       .catch((error) => res.status(500).json({ error }));
   });
