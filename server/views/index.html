@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>File Upload</title>
+</head>
+<body>
+  <h1>Upload Files</h1>
+  <form id="uploadForm" enctype="multipart/form-data">
+    <input type="file" name="file" id="fileInput" required>
+    <button type="submit">Upload</button>
+  </form>
+
+  <h2>Files</h2>
+  <ul id="fileList"></ul>
+
+  <script>
+    document.getElementById('uploadForm').addEventListener('submit', function(event) {
+      event.preventDefault();
+      const formData = new FormData();
+      formData.append('file', document.getElementById('fileInput').files[0]);
+
+      fetch('http://localhost:3000/api/files/upload', {
+        method: 'POST',
+        body: formData
+      })
+      .then(response => response.json())
+      .then(data => {
+        alert('File uploaded successfully');
+        loadFiles();
+      })
+      .catch(error => console.error('Error:', error));
+    });
+
+    function loadFiles() {
+      fetch('http://localhost:3000/api/files')
+        .then(response => response.json())
+        .then(files => {
+          const fileList = document.getElementById('fileList');
+          fileList.innerHTML = '';
+          files.forEach(file => {
+            const li = document.createElement('li');
+            li.textContent = file.originalname;
+            const viewButton = document.createElement('button');
+            viewButton.textContent = 'View';
+            viewButton.onclick = () => {
+              window.open(`http://localhost:3000/api/files/${file._id}`);
+            };
+            const deleteButton = document.createElement('button');
+            deleteButton.textContent = 'Delete';
+            deleteButton.onclick = () => {
+              fetch(`http://localhost:3000/api/files/${file._id}`, {
+                method: 'DELETE'
+              })
+              .then(() => {
+                alert('File deleted successfully');
+                loadFiles();
+              })
+              .catch(error => console.error('Error:', error));
+            };
+            li.appendChild(viewButton);
+            li.appendChild(deleteButton);
+            fileList.appendChild(li);
+          });
+        })
+        .catch(error => console.error('Error:', error));
+    }
+
+    loadFiles();
+  </script>
+</body>
+</html>
