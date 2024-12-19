@@ -6,10 +6,13 @@ const fileRoutes = require('./routes/fileRoutes');
 const app = express();
 const PORT = 5000;
 
-mongoose.connect('mongodb://localhost:27017/lutobook', {
-  useNewUrlParser: true,
-  useUnifiedTopology: true
-});
+mongoose.connect(
+  'mongodb+srv://ti:U2vQtlRnF0q7y3sD@lutobook.uimdu.mongodb.net/?retryWrites=true&w=majority&appName=lutobook',
+  {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  }
+);
 
 app.use(cors());
 app.use(express.json());

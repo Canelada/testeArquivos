@@ -2,7 +2,8 @@ const { MongoClient } = require('mongodb');
 
 // MongoDB connection test
 async function testMongoConnection() {
-  const uri = "mongodb://localhost:27017";
+  const uri =
+    'mongodb+srv://ti:U2vQtlRnF0q7y3sD@lutobook.uimdu.mongodb.net/?retryWrites=true&w=majority&appName=lutobook';
   const client = new MongoClient(uri, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
